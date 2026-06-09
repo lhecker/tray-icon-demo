@@ -1,7 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <Windows.h>
-#include <Uxtheme.h>
+
 #include <shellapi.h>
 
 #include <stdbool.h>
@@ -79,9 +79,12 @@ static LRESULT CALLBACK window_callback(HWND hwnd, UINT message, WPARAM wparam, 
 
 static void menu_init(HINSTANCE instance)
 {
+    // If you need an actual window:
+    // * Pass WS_OVERLAPPEDWINDOW, etc., as the 4th param to CreateWindowExW
+    // * Replace HWND_MESSAGE with null
+
     const WNDCLASSEXW wcex = {
         .cbSize = sizeof(WNDCLASSEX),
-        .style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
         .lpfnWndProc = window_callback,
         .cbWndExtra = sizeof(void*),
         .hInstance = instance,
@@ -95,12 +98,12 @@ static void menu_init(HINSTANCE instance)
         0,
         L"Tray Icon Demo",
         L"Tray Icon Demo",
-        WS_OVERLAPPEDWINDOW,
+        0,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        NULL,
+        HWND_MESSAGE,
         NULL,
         instance,
         NULL
